@@ -8,17 +8,16 @@ import ProLayout, {
   BasicLayoutProps as ProLayoutProps,
   Settings,
   DefaultFooter,
-} from "@ant-design/pro-layout";
-import React, { useEffect, useMemo, useRef } from "react";
-import { Link, useIntl, connect, Dispatch, history } from "umi";
-import { GithubOutlined } from "@ant-design/icons";
-import { Result, Button } from "antd";
-import Authorized from "@/utils/Authorized";
-import RightContent from "@/components/GlobalHeader/RightContent";
-import { ConnectState } from "@/models/connect";
-import { getMatchMenu } from "@umijs/route-utils";
-import logo from "../assets/logo.svg";
-
+} from '@ant-design/pro-layout';
+import React, { useEffect, useMemo, useRef } from 'react';
+import { Link, useIntl, connect, Dispatch, history } from 'umi';
+import { GithubOutlined } from '@ant-design/icons';
+import { Result, Button } from 'antd';
+import Authorized from '@/utils/Authorized';
+import RightContent from '@/components/GlobalHeader/RightContent';
+import { ConnectState } from '@/models/connect';
+import { getMatchMenu } from '@umijs/route-utils';
+import logo from '../assets/logo.svg';
 const noMatch = (
   <Result
     status={403}
@@ -35,13 +34,13 @@ export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
   };
-  route: ProLayoutProps["route"] & {
+  route: ProLayoutProps['route'] & {
     authority: string[];
   };
   settings: Settings;
   dispatch: Dispatch;
 }
-export type BasicLayoutContext = { [K in "location"]: BasicLayoutProps[K] } & {
+export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
   };
@@ -64,21 +63,21 @@ const defaultFooterDom = (
     copyright={`${new Date().getFullYear()} 蚂蚁集团体验技术部出品`}
     links={[
       {
-        key: "Ant Design Pro",
-        title: "Ant Design Pro",
-        href: "https://pro.ant.design",
+        key: 'Ant Design Pro',
+        title: 'Ant Design Pro',
+        href: 'https://pro.ant.design',
         blankTarget: true,
       },
       {
-        key: "github",
+        key: 'github',
         title: <GithubOutlined />,
-        href: "https://github.com/ant-design/ant-design-pro",
+        href: 'https://github.com/ant-design/ant-design-pro',
         blankTarget: true,
       },
       {
-        key: "Ant Design",
-        title: "Ant Design",
-        href: "https://ant.design",
+        key: 'Ant Design',
+        title: 'Ant Design',
+        href: 'https://ant.design',
         blankTarget: true,
       },
     ]}
@@ -91,16 +90,14 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     children,
     settings,
     location = {
-      pathname: "/",
+      pathname: '/',
     },
   } = props;
-
   const menuDataRef = useRef<MenuDataItem[]>([]);
-
   useEffect(() => {
     if (dispatch) {
       dispatch({
-        type: "user/fetchCurrent",
+        type: 'user/fetchCurrent',
       });
     }
   }, []);
@@ -111,47 +108,45 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const handleMenuCollapse = (payload: boolean): void => {
     if (dispatch) {
       dispatch({
-        type: "global/changeLayoutCollapsed",
+        type: 'global/changeLayoutCollapsed',
         payload,
       });
     }
-  };
-  // get children authority
+  }; // get children authority
+
   const authorized = useMemo(
     () =>
-      getMatchMenu(location.pathname || "/", menuDataRef.current).pop() || {
+      getMatchMenu(location.pathname || '/', menuDataRef.current).pop() || {
         authority: undefined,
       },
-    [location.pathname]
+    [location.pathname],
   );
-
-  const { formatMessage } = useIntl();
-
+  const {} = useIntl();
   return (
     <ProLayout
       logo={logo}
-      formatMessage={formatMessage}
       {...props}
       {...settings}
       onCollapse={handleMenuCollapse}
-      onMenuHeaderClick={() => history.push("/")}
+      onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl || !menuItemProps.path) {
           return defaultDom;
         }
+
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
       breadcrumbRender={(routers = []) => [
         {
-          path: "/",
-          breadcrumbName: formatMessage({ id: "menu.home" }),
+          path: '/',
+          breadcrumbName: '首页',
         },
         ...routers,
       ]}
       itemRender={(route, params, routes, paths) => {
         const first = routes.indexOf(route) === 0;
         return first ? (
-          <Link to={paths.join("/")}>{route.breadcrumbName}</Link>
+          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
           <span>{route.breadcrumbName}</span>
         );
