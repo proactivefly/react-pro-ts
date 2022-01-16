@@ -26,11 +26,19 @@ export interface LoginModelType {
 
 const Model: LoginModelType = {
   namespace: "login",
-
   state: {
     status: undefined,
   },
 
+
+
+  /**
+   * 
+   * 格式为 *(action, effects) => void 或 [*(action, effects) => void, { type }]。
+   * 
+   * type 类型有：takeEvery，takeLatest，throttle，watcher
+   * 参考链接 ：https://dvajs.com/api/#effects
+   */
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
@@ -73,7 +81,9 @@ const Model: LoginModelType = {
       }
     },
   },
-
+  /**
+   * 格式为 (state, action) => newState 或 [(state, action) => newState, enhancer]。
+   */
   reducers: {
     changeLoginStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);

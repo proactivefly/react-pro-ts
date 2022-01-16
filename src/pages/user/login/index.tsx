@@ -7,23 +7,25 @@ import {
   UserOutlined,
   WeiboCircleOutlined,
 } from '@ant-design/icons';
+
+
 import { Alert, Space, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
-import { connect, Dispatch, useIntl, FormattedMessage } from 'umi';
+import { connect, Dispatch } from 'umi';
 import { StateType } from '@/models/login';
 import { getFakeCaptcha, LoginParamsType } from '@/services/login';
 import { ConnectState } from '@/models/connect';
 import styles from './index.less';
+
+
 interface LoginProps {
   dispatch: Dispatch;
   userLogin: StateType;
   submitting?: boolean;
 }
 
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => (
+const LoginMessage: React.FC<{content: string;}> = ({ content }) => (
   <Alert
     style={{
       marginBottom: 24,
@@ -32,13 +34,21 @@ const LoginMessage: React.FC<{
     type="error"
     showIcon
   />
-); // React.FC是 React.FunctionComponent的缩写
+); 
 
+// React.FC是 React.FunctionComponent的缩写
 const Login: React.FC<LoginProps> = (props) => {
+
+  // props中包含了 model层给的userLogin，和 submitiing
+  console.log('一个组件具备的所有参数props',props)
   const { userLogin = {}, submitting } = props;
+
+  // store中登录状态
   const { status, type: loginType } = userLogin;
+
+  // 给type初始值为’account‘
   const [type, setType] = useState<string>('account');
-  const intl = useIntl();
+
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
@@ -71,26 +81,17 @@ const Login: React.FC<LoginProps> = (props) => {
         <Tabs activeKey={type} onChange={setType}>
           <Tabs.TabPane
             key="account"
-            tab={intl.formatMessage({
-              id: 'pages.login.accountLogin.tab',
-              defaultMessage: '账户密码登录',
-            })}
+            tab='账户密码登录'
           />
           <Tabs.TabPane
             key="mobile"
-            tab={intl.formatMessage({
-              id: 'pages.login.phoneLogin.tab',
-              defaultMessage: '手机号登录',
-            })}
+            tab='手机号登录'
           />
         </Tabs>
 
         {status === 'error' && loginType === 'account' && !submitting && (
           <LoginMessage
-            content={intl.formatMessage({
-              id: 'pages.login.accountLogin.errorMessage',
-              defaultMessage: '账户或密码错误（admin/ant.design)',
-            })}
+            content={'账户或密码错误（admin/ant.design)'}
           />
         )}
         {type === 'account' && (
@@ -101,10 +102,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 size: 'large',
                 prefix: <UserOutlined className={styles.prefixIcon} />,
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.username.placeholder',
-                defaultMessage: '用户名: admin or user',
-              })}
+              placeholder='用户名: admin or user'
               rules={[
                 {
                   required: true,
@@ -118,10 +116,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 size: 'large',
                 prefix: <LockTwoTone className={styles.prefixIcon} />,
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.password.placeholder',
-                defaultMessage: '密码: ant.design',
-              })}
+              placeholder='密码: ant.design'
               rules={[
                 {
                   required: true,
@@ -143,10 +138,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 prefix: <MobileTwoTone className={styles.prefixIcon} />,
               }}
               name="mobile"
-              placeholder={intl.formatMessage({
-                id: 'pages.login.phoneNumber.placeholder',
-                defaultMessage: '手机号',
-              })}
+              placeholder={'手机号'}
               rules={[
                 {
                   required: true,
@@ -166,21 +158,8 @@ const Login: React.FC<LoginProps> = (props) => {
               captchaProps={{
                 size: 'large',
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.captcha.placeholder',
-                defaultMessage: '请输入验证码',
-              })}
-              captchaTextRender={(timing, count) =>
-                timing
-                  ? `${count} ${intl.formatMessage({
-                      id: 'pages.getCaptchaSecondText',
-                      defaultMessage: '获取验证码',
-                    })}`
-                  : intl.formatMessage({
-                      id: 'pages.login.phoneLogin.getVerificationCode',
-                      defaultMessage: '获取验证码',
-                    })
-              }
+              placeholder='请输入验证码'
+              captchaTextRender={(timing, count) => timing?`${count}获取验证码`:'获取验证码'}
               name="captcha"
               rules={[
                 {
@@ -227,7 +206,37 @@ const Login: React.FC<LoginProps> = (props) => {
   );
 };
 
-export default connect(({ login, loading }: ConnectState) => ({
-  userLogin: login,
-  submitting: loading.effects['login/login'],
-}))(Login);
+
+
+/* 
+	1.mapStateToProps函数返回的是一个对象；
+	2.返回的对象中的key就作为传递给UI组件props的key,value就作为传递给UI组件props的value
+	3.mapStateToProps用于传递状态
+*/
+// function mapStateToProps(state){
+// 	return {count:state}
+// }
+
+/* 
+	1.mapDispatchToProps函数返回的是一个对象；
+	2.返回的对象中的key就作为传递给UI组件props的key,value就作为传递给UI组件props的value
+	3.mapDispatchToProps用于传递操作状态的方法
+*/
+// function mapDispatchToProps(dispatch){
+// 	return {
+// 		jia:number => dispatch(createIncrementAction(number)),
+// 		jian:number => dispatch(createDecrementAction(number)),
+// 		jiaAsync:(number,time) => dispatch(createIncrementAsyncAction(number,time)),
+// 	}
+// }
+
+
+export default connect(
+  function (globalStore: ConnectState){
+    console.log('相当于是个全局的状态store',globalStore)
+    return {
+      userLogin: globalStore.login, // 登录状态
+      submitting: globalStore.loading.effects['login/login'], //登录按钮状态
+    }
+  }
+)(Login);
