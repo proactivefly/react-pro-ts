@@ -43,8 +43,10 @@ const Login: React.FC<LoginProps> = (props) => {
   console.log('一个组件具备的所有参数props',props)
   const { userLogin = {}, submitting } = props;
 
-  // store中登录状态
-  const { status, type: loginType } = userLogin;
+  // store中登录状态，!!!!!对type重命名为loginType
+  const { status, type:loginType } = userLogin;
+
+  console.log(status,loginType)
 
   // 给type初始值为’account‘
   const [type, setType] = useState<string>('account');
@@ -130,6 +132,7 @@ const Login: React.FC<LoginProps> = (props) => {
         {status === 'error' && loginType === 'mobile' && !submitting && (
           <LoginMessage content="验证码错误" />
         )}
+        {/* 手机号正则校验 */}
         {type === 'mobile' && (
           <>
             <ProFormText
