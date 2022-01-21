@@ -23,6 +23,7 @@ interface LoginProps {
   dispatch: Dispatch;
   userLogin: StateType;
   submitting?: boolean;
+  submitLogin:any
 }
 
 const LoginMessage: React.FC<{content: string;}> = ({ content }) => (
@@ -43,19 +44,21 @@ const Login: React.FC<LoginProps> = (props) => {
   console.log('一个组件具备的所有参数props',props)
   const { userLogin = {}, submitting } = props;
 
-  // store中登录状态
+  // store中登录状态,把type重命名为loginType
   const { status, type: loginType } = userLogin;
+
 
   // 给type初始值为’account‘
   const [type, setType] = useState<string>('account');
 
 
   const handleSubmit = (values: LoginParamsType) => {
-    const { dispatch } = props;
-    dispatch({
+    const { /* dispatch, */submitLogin } = props;
+    /* dispatch({
       type: 'login/login',
       payload: { ...values, type },
-    });
+    }); */
+    submitLogin({...values})
   };
 
   return (
@@ -237,6 +240,16 @@ export default connect(
     return {
       userLogin: globalStore.login, // 登录状态
       submitting: globalStore.loading.effects['login/login'], //登录按钮状态
+    }
+  },
+  function(dispatch:Dispatch){ //一般情况下不写，直接用dispatch!!!!!!!!
+    console.log('第二个函数')
+    console.log('action',dispatch)
+    return {
+      submitLogin:(payload:LoginParamsType)=>dispatch({
+        type: 'login/login',
+        payload: { ...payload },
+      })
     }
   }
 )(Login);
