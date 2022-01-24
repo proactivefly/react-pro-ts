@@ -18,6 +18,8 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
+
+// 未匹配路由
 const noMatch = (
   <Result
     status={403}
@@ -30,6 +32,12 @@ const noMatch = (
     }
   />
 );
+
+
+/**
+ * type 和 interface的区别 https://www.jb51.net/article/163299.htm
+ */
+// 定义interface
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -40,23 +48,32 @@ export interface BasicLayoutProps extends ProLayoutProps {
   settings: Settings;
   dispatch: Dispatch;
 }
-export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
-  breadcrumbNameMap: {
-    [path: string]: MenuDataItem;
+
+// type类接口
+export type BasicLayoutContext = 
+  { [K in 'location']: BasicLayoutProps[K] }
+    & 
+  {
+    breadcrumbNameMap: {
+      [path: string]: MenuDataItem;
+    };
   };
-};
 /**
  * use Authorized check all menu item
  */
 
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-  menuList.map((item) => {
+const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>{
+  console.log('meunList:',menuList)
+  return menuList.map((item) => {
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : undefined,
     };
+    // todo 对菜单鉴权 下方as 为ts中类型断言
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
+}
+  
 
 const defaultFooterDom = (
   <DefaultFooter
