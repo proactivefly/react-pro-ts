@@ -12,6 +12,8 @@ export default defineConfig({
   dva: {
     hmr: true,
   },
+  mfsu:{},
+  webpack5:{},
   history: {
     type: "browser",
   },
