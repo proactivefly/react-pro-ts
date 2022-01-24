@@ -1,15 +1,12 @@
 import {
-  AlipayCircleOutlined,
   LockTwoTone,
   MailTwoTone,
   MobileTwoTone,
-  TaobaoCircleOutlined,
   UserOutlined,
-  WeiboCircleOutlined,
 } from '@ant-design/icons';
 
 
-import { Alert, Space, message, Tabs } from 'antd';
+import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 import { connect, Dispatch } from 'umi';
@@ -23,6 +20,7 @@ interface LoginProps {
   dispatch: Dispatch;
   userLogin: StateType;
   submitting?: boolean;
+  submitLogin:any
 }
 
 const LoginMessage: React.FC<{content: string;}> = ({ content }) => (
@@ -48,16 +46,18 @@ const Login: React.FC<LoginProps> = (props) => {
 
   console.log(status,loginType)
 
+
   // 给type初始值为’account‘
   const [type, setType] = useState<string>('account');
 
 
   const handleSubmit = (values: LoginParamsType) => {
-    const { dispatch } = props;
-    dispatch({
+    const { /* dispatch, */submitLogin } = props;
+    /* dispatch({
       type: 'login/login',
       payload: { ...values, type },
-    });
+    }); */
+    submitLogin({...values})
   };
 
   return (
@@ -199,12 +199,6 @@ const Login: React.FC<LoginProps> = (props) => {
           </a>
         </div>
       </ProForm>
-      <Space className={styles.other}>
-        其他登录方式 :
-        <AlipayCircleOutlined className={styles.icon} />
-        <TaobaoCircleOutlined className={styles.icon} />
-        <WeiboCircleOutlined className={styles.icon} />
-      </Space>
     </div>
   );
 };
@@ -240,6 +234,16 @@ export default connect(
     return {
       userLogin: globalStore.login, // 登录状态
       submitting: globalStore.loading.effects['login/login'], //登录按钮状态
+    }
+  },
+  function(dispatch:Dispatch){ //一般情况下不写，直接用dispatch!!!!!!!!
+    console.log('第二个函数')
+    console.log('action',dispatch)
+    return {
+      submitLogin:(payload:LoginParamsType)=>dispatch({
+        type: 'login/login',
+        payload: { ...payload },
+      })
     }
   }
 )(Login);

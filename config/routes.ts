@@ -25,20 +25,20 @@
           },
           {
             path: "/welcome",
-            name: "welcome",
+            name: "欢迎",
             icon: "smile",
             component: "./Welcome",
           },
           {
             path: "/admin",
-            name: "admin",
+            name: "管理权限",
             icon: "crown",
             component: "./Admin",
             authority: ["admin"],
             routes: [
               {
                 path: "/admin/sub-page",
-                name: "sub-page",
+                name: "子页面",
                 icon: "smile",
                 component: "./Welcome",
                 authority: ["admin"],
@@ -46,7 +46,7 @@
             ],
           },
           {
-            name: "list.table-list",
+            name: "表格页面",
             icon: "table",
             path: "/list",
             component: "./ListTableList",
