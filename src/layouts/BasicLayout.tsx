@@ -13,7 +13,9 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import { Link, useIntl, connect, Dispatch, history } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
+// 权限鉴定
 import Authorized from '@/utils/Authorized';
+
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
@@ -58,18 +60,24 @@ export type BasicLayoutContext =
       [path: string]: MenuDataItem;
     };
   };
+
 /**
+ * 
+ * 检验菜单权限方法
  * use Authorized check all menu item
  */
 
+
+// item为MenuDataItem的数组，返回值也是item为MenuDataItem的数组 
+
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>{
-  console.log('meunList:',menuList)
+  // console.log('meunList------->',menuList)
   return menuList.map((item) => {
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : undefined,
     };
-    // todo 对菜单鉴权 下方as 为ts中类型断言
+    // todo 对菜单鉴权， 下方as 为ts中类型断言
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 }
@@ -101,16 +109,23 @@ const defaultFooterDom = (
   />
 );
 
+//#region 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
-  const {
-    dispatch,
-    children,
-    settings,
+  console.log('BasicLayoutProps------>',props)
+  const { dispatch, children, settings,
     location = {
       pathname: '/',
     },
   } = props;
+
+  
   const menuDataRef = useRef<MenuDataItem[]>([]);
+
+ /*  
+ 作为componentDidMount使用，[]变化执行，空数组只在初次渲染后执行
+ 作为componentDidUpdate使用，[n,m]n和m变化执行，初始化n和m也是变化，由undifined变成初始值，可设置判断条件，消除初始变化
+*/
+
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -182,7 +197,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     </ProLayout>
   );
 };
+//#endregion
 
+
+// connect一系列骚操作
 export default connect(({ global, settings }: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
