@@ -101,7 +101,9 @@ const defaultFooterDom = (
   />
 );
 
+// 泛型BasicLayoutProps
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
+  console.log('BasicLayoutProps-props',props)
   const {
     dispatch,
     children,
