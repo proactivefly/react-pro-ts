@@ -52,6 +52,10 @@ export interface BasicLayoutProps extends ProLayoutProps {
 }
 
 // type类接口
+
+/**
+ *  in 介绍 ：https://juejin.cn/post/6844904131975446536
+ */
 export type BasicLayoutContext = 
   { [K in 'location']: BasicLayoutProps[K] }
     & 
