@@ -2,5 +2,7 @@ node_modules
 
 src/.umi
 
-.vscode
-yarn-error.log
+
+/.yarn-error.log
+/.vscode
+/yarn-error.log
