@@ -38,13 +38,13 @@ const LoginMessage: React.FC<{content: string;}> = ({ content }) => (
 const Login: React.FC<LoginProps> = (props) => {
 
   // props中包含了 model层给的userLogin，和 submitiing
-  console.log('一个组件具备的所有参数props',props)
+  // console.log('一个组件具备的所有参数props',props)
   const { userLogin = {}, submitting } = props;
 
   // store中登录状态，!!!!!对type重命名为loginType
   const { status, type:loginType } = userLogin;
 
-  console.log(status,loginType)
+  // console.log(status,loginType)
 
 
   // 给type初始值为’account‘
@@ -232,15 +232,15 @@ const Login: React.FC<LoginProps> = (props) => {
 
 export default connect(
   function (globalStore: ConnectState){
-    console.log('相当于是个全局的状态store',globalStore)
+    // console.log('相当于是个全局的状态store',globalStore)
     return {
       userLogin: globalStore.login, // 登录状态
       submitting: globalStore.loading.effects['login/login'], //登录按钮状态
     }
   },
   function(dispatch:Dispatch){ //一般情况下不写，直接用dispatch!!!!!!!!
-    console.log('第二个函数')
-    console.log('action',dispatch)
+    // console.log('第二个函数')
+    // console.log('action',dispatch)
     return {
       submitLogin:(payload:LoginParamsType)=>dispatch({
         type: 'login/login',

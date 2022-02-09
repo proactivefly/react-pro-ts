@@ -92,6 +92,7 @@ export default {
     const { password, userName, type } = req.body;
     await waitTime(2000);
     if (password === "ant.design" && userName === "admin") {
+      console.log("登录进来了e")
       res.send({
         status: "ok",
         type,
@@ -161,6 +162,5 @@ export default {
       path: "/base/category/list",
     });
   },
-
   "GET  /api/login/captcha": getFakeCaptcha,
 };
