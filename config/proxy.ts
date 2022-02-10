@@ -8,7 +8,7 @@
 export default {
   dev: {
     "/api/": {
-      target: "https://localhost:8000",
+      target: "https://preview.pro.ant.design",
       changeOrigin: true,
       pathRewrite: { "^": "" },
     },
