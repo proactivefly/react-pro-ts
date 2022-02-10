@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-
+console.log("express")
 const waitTime = (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -89,6 +89,7 @@ export default {
     },
   ],
   "POST /api/login/account": async (req: Request, res: Response) => {
+    console.log("niub ")
     const { password, userName, type } = req.body;
     await waitTime(2000);
     if (password === "ant.design" && userName === "admin") {
