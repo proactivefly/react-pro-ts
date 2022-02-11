@@ -232,15 +232,15 @@ const Login: React.FC<LoginProps> = (props) => {
 
 export default connect(
   function (globalStore: ConnectState){
-    // console.log('相当于是个全局的状态store',globalStore)
+    console.log('相当于是个全局的状态store',globalStore)
     return {
       userLogin: globalStore.login, // 登录状态
       submitting: globalStore.loading.effects['login/login'], //登录按钮状态
     }
   },
   function(dispatch:Dispatch){ //一般情况下不写，直接用dispatch!!!!!!!!
-    // console.log('第二个函数')
-    // console.log('action',dispatch)
+    console.log('第二个函数')
+    console.log('action',dispatch)
     return {
       submitLogin:(payload:LoginParamsType)=>dispatch({
         type: 'login/login',

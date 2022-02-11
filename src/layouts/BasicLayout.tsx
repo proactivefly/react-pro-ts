@@ -10,10 +10,10 @@
   DefaultFooter,
 } from '@ant-design/pro-layout';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Link, useIntl, connect, Dispatch, history } from 'umi';
+import { Link, connect, Dispatch, history } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
-// 权限鉴定
+// 权限鉴定!!!!
 import Authorized from '@/utils/Authorized';
 
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -116,7 +116,10 @@ const defaultFooterDom = (
 //#region 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   console.log('BasicLayoutProps------>',props)
-  const { dispatch, children, settings,
+  const { 
+    dispatch, 
+    children, 
+    settings,
     location = {
       pathname: '/',
     },
@@ -125,10 +128,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   
   const menuDataRef = useRef<MenuDataItem[]>([]);
 
- /*  
- 作为componentDidMount使用，[]变化执行，空数组只在初次渲染后执行
- 作为componentDidUpdate使用，[n,m]n和m变化执行，初始化n和m也是变化，由undifined变成初始值，可设置判断条件，消除初始变化
-*/
+  /*  
+  作为componentDidMount使用，[]变化执行，空数组只在初次渲染后执行
+  作为componentDidUpdate使用，[n,m]n和m变化执行，初始化n和m也是变化，由undifined变成初始值，可设置判断条件，消除初始变化
+  */
 
   useEffect(() => {
     if (dispatch) {
@@ -137,9 +140,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       });
     }
   }, []);
-  /**
-   * init variables
-   */
 
   const handleMenuCollapse = (payload: boolean): void => {
     if (dispatch) {
@@ -148,16 +148,35 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         payload,
       });
     }
-  }; // get children authority
+  }; 
+
+
+  /**
+   * useMemo 和 useCallback的区别
+   * https://blog.csdn.net/a5534789/article/details/103775109
+   * 
+   * url发生变化时触发验证
+   */
 
   const authorized = useMemo(
-    () =>
-      getMatchMenu(location.pathname || '/', menuDataRef.current).pop() || {
-        authority: undefined,
-      },
-    [location.pathname],
+    () =>{
+      return (
+        getMatchMenu(location.pathname || '/', menuDataRef.current).pop() 
+        || 
+        {authority: undefined}
+      )
+    },
+    [location.pathname]
   );
-  const {} = useIntl();
+  console.log('autoorized-----',authorized)
+
+
+  /* let a={
+    a:['admin']
+  }
+  console.log('这是什么语法',a!.a) */
+
+  
   return (
     <ProLayout
       logo={logo}
@@ -169,7 +188,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         if (menuItemProps.isUrl || !menuItemProps.path) {
           return defaultDom;
         }
-
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
       breadcrumbRender={(routers = []) => [
