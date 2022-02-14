@@ -1,13 +1,14 @@
 import { reloadAuthorized } from "./Authorized";
-
-// use localStorage to store the authority info, which might be sent from server in actual project.
+// 使用localStorage存储权限信息，这些信息可能是在实际项目中从服务器发送的。
+ //
 export function getAuthority(str?: string): string | string[] {
-  const authorityString =
-    typeof str === "undefined" && localStorage
-      ? localStorage.getItem("antd-pro-authority")
-      : str;
-  // authorityString could be admin, "admin", ["admin"]
+  // 如果未传入参数，从localStorage中获取，如果传了就用str  
+  const authorityString = 
+    typeof str === "undefined" ? localStorage.getItem("antd-pro-authority"): str;
+  // authorityString 形如  admin, "admin", ["admin"]
   let authority;
+
+  //如果JSON.parse报错了就直接取值
   try {
     if (authorityString) {
       authority = JSON.parse(authorityString);
@@ -18,7 +19,6 @@ export function getAuthority(str?: string): string | string[] {
   if (typeof authority === "string") {
     return [authority];
   }
-  // preview.pro.ant.design only do not use in your production.
   // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
   if (
     !authority &&
