@@ -115,7 +115,7 @@ const defaultFooterDom = (
 
 //#region 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
-  console.log('BasicLayoutProps------>',props)
+  // console.log('BasicLayoutProps------>',props)
   const { 
     dispatch, 
     children, 
@@ -168,7 +168,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     },
     [location.pathname]
   );
-  console.log('autoorized-----',authorized)
+  // console.log('authorized-----',authorized)
 
 
   /* let a={

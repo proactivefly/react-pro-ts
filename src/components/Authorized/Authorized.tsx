@@ -27,8 +27,9 @@ const Authorized: React.FunctionComponent<AuthorizedProps> = ({
     />
   ),
 }) => {
-  const childrenRender: React.ReactNode =
-    typeof children === "undefined" ? null : children;
+  // 如果有children渲染children，没有返回null
+  const childrenRender: React.ReactNode =typeof children === "undefined" ? null : children;
+
   const dom = check(authority, childrenRender, noMatch);
   return <>{dom}</>;
 };
