@@ -25,12 +25,14 @@ const renderAuthorize =
 
   <T>(Authorized: T): ((currentAuthority: CurrentAuthorityType) => T) =>{
     let what=(currentAuthority: CurrentAuthorityType): T => {
+      // 闹半天就是在给CURRENT赋值，并且返回了参数
+      //#region
       if (currentAuthority) {
         console.log('currentAuthority——————————————————————————————',currentAuthority)
         if (typeof currentAuthority === "function") {
           CURRENT = currentAuthority();
         }
-        if (
+        if ( // 2--如果是字符串数组
           Object.prototype.toString.call(currentAuthority) ==="[object String]" 
           ||
           Array.isArray(currentAuthority)
@@ -40,11 +42,13 @@ const renderAuthorize =
       } else {
         CURRENT = "NULL";
       }
+      // #endregion
+
       return Authorized;
     };
     return what
   }
   
-
+console.log('CURRENT--',CURRENT)
 export { CURRENT };
 export default <T>(Authorized: T) => renderAuthorize<T>(Authorized);

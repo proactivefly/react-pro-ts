@@ -16,21 +16,20 @@ type IAuthorizedType = React.FC<AuthorizedProps> & {
   AuthorizedRoute: typeof AuthorizedRoute;
 };
 
-const Authorized: React.FunctionComponent<AuthorizedProps> = (props)=>{
+const Authorized: React.FunctionComponent<AuthorizedProps> = ({
+  children,
+  authority,
+  noMatch = (
+    <Result
+      status="403"
+      title="403"
+      subTitle="Sorry, you are not authorized to access this page."
+    />
+  ),
+}) => {
+  // 如果有children渲染children，没有返回null
+  const childrenRender: React.ReactNode =typeof children === "undefined" ? null : children;
 
-  console.log('props——————————————————',props)
-  const {
-    children,
-    authority,
-    noMatch = (
-      <Result
-        status="403"
-        title="403"
-        subTitle="Sorry, you are not authorized to access this page."
-      />
-    ),
-  } =props
-  const childrenRender: React.ReactNode = typeof children === "undefined" ? null : children;
   const dom = check(authority, childrenRender, noMatch);
   return <>{dom}</>;
 
