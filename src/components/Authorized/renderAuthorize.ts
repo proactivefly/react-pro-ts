@@ -3,17 +3,20 @@
 
 // 当前权限
 let CURRENT: string | string[] = "NULL";
+
 // 当前权限类型 字符串 或字符串数组 或函数
 type CurrentAuthorityType = string | string[] | (() => typeof CURRENT);
-/**
- * use  authority or getAuthority
- * @param {string|()=>String} currentAuthority
- */
 
 
-/* const fun=<T>(Authorized: T):((currentAuthority: CurrentAuthorityType) => T)=>{
-  return (currentAuthority: CurrentAuthorityType) => Authorized
+
+/* 
+
+  const fun=<T>(Authorized: T):((currentAuthority: CurrentAuthorityType) => T)=>{
+    return (currentAuthority: CurrentAuthorityType) => Authorized
+  }
+
   函数接收参数T ，返回值为函数（该函数参数是CurrentAuthorityType类型，返回T类型）
+
 } */
 
 
@@ -21,9 +24,9 @@ type CurrentAuthorityType = string | string[] | (() => typeof CURRENT);
 const renderAuthorize =
 
   <T>(Authorized: T): ((currentAuthority: CurrentAuthorityType) => T) =>{
-    
     let what=(currentAuthority: CurrentAuthorityType): T => {
       if (currentAuthority) {
+        console.log('currentAuthority——————————————————————————————',currentAuthority)
         if (typeof currentAuthority === "function") {
           CURRENT = currentAuthority();
         }
@@ -39,7 +42,6 @@ const renderAuthorize =
       }
       return Authorized;
     };
-    console.log('what',what)
     return what
   }
   

@@ -115,7 +115,7 @@ const defaultFooterDom = (
 
 //#region 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
-  console.log('BasicLayoutProps------>',props)
+  // console.log('BasicLayoutProps------>',props)
   const { 
     dispatch, 
     children, 
@@ -156,19 +156,32 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
    * https://blog.csdn.net/a5534789/article/details/103775109
    * 
    * url发生变化时触发验证，用于缓存数据，优化性能
+   * 
+   * getMatchMenu 该方法用于获取路由表中配置的权限
    */
 
   const authorized = useMemo(
     () =>{
+      // pop() 删除数组最后一个元素并返回该删除元素
       return (
-        getMatchMenu(location.pathname || '/', menuDataRef.current).pop() 
+        getMatchMenu(location.pathname || '/', menuDataRef.current).pop()
         || 
         {authority: undefined}
       )
     },
     [location.pathname]
   );
-  console.log('autoorized-----',authorized)
+  console.log('获取权限authorized-----',authorized)
+  
+  /**
+   * 
+   * {
+   *    authority:['admin]
+   *    children:[],
+   *    component:{}
+   * }
+   * 
+   *  */  
 
 
   /* let a={
@@ -213,6 +226,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         return menuData || [];
       }}
     >
+
+      {/* 判断有没有这个权限来渲染  的组件*/}
       <Authorized authority={authorized!.authority} noMatch={noMatch}>
         {children}
       </Authorized>
